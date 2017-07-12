@@ -30,6 +30,7 @@ public class MoverScript : MonoBehaviour {
         if (!IsMoving)
         {
             IsMoving = true;
+
             StartCoroutine(MoveToNext());
         }
         else

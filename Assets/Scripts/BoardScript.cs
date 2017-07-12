@@ -11,6 +11,7 @@ public class BoardScript : MonoBehaviour {
     public Camera camera;
     public List<Tile> Tiles;
     public string[] BlockedTiles;
+
     public enum Dir { Up,Down,Left,Right}
 
     private void Awake()

@@ -26,6 +26,7 @@ public class Tile : MonoBehaviour
     protected virtual void OnStatusChanged()
     {
         if (StatusChanged != null)
+
             StatusChanged(this, EventArgs.Empty);
     }
 
