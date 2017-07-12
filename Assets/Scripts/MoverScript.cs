@@ -7,9 +7,11 @@ public class MoverScript : MonoBehaviour {
     private BoardScript boardScript;
     public GameObject CurrentTile;
     public BoardScript.Dir dir;
-    public float MoveSpeed;
+    public float MoveTime;
+    public float MinSpeed;
+    public float MaxSpeed;
     private bool IsMoving;
-
+    public float StartTime;
     private void Awake()
     {
         boardScript = board.GetComponent<BoardScript>();
@@ -32,8 +34,13 @@ public class MoverScript : MonoBehaviour {
         }
         else
         {
+            //Move towards the current tile
             Vector2 TargetPos = new Vector2(CurrentTile.transform.position.x, CurrentTile.transform.position.y);
-            transform.position = Vector2.MoveTowards(transform.position, TargetPos, MoveSpeed * Time.deltaTime);
+            //transform.position = Vector2.MoveTowards(transform.position, TargetPos, MoveSpeed * Time.deltaTime);
+            float t = (Time.time - StartTime) / MoveTime;
+            float MoveDelta = Mathf.SmoothStep(MinSpeed, MaxSpeed, t);
+            Vector2 NewPos = Vector2.Lerp(transform.position ,TargetPos,MoveDelta);
+            transform.position = NewPos;
         }
 
         
@@ -60,10 +67,11 @@ public class MoverScript : MonoBehaviour {
         var t = boardScript.MoveNext(tile, dir);
         if (t != null)
         {
-           
             CurrentTile = t.gameObject;
-
-            yield return new WaitForSeconds(MoveSpeed);
+            StartTime = Time.time;
+            
+            t.ChangeStatus(Tile.TileStatus.Used);
+            yield return new WaitForSeconds(MoveTime);
         }
         else
         {
